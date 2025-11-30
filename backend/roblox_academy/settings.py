@@ -176,3 +176,8 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+
+# CSRF settings for HTTPS
+CSRF_TRUSTED_ORIGINS = ['https://haam.cloud', 'https://www.haam.cloud']
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
