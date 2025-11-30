@@ -15,33 +15,8 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 
-# Копируем файлы проекта явно (чтобы гарантировать копирование lib/)
-COPY package.json ./
-COPY tsconfig.json ./
-COPY next.config.mjs ./
-COPY postcss.config.mjs ./
-COPY components.json ./
-COPY app ./app
-COPY components ./components
-COPY lib ./lib
-COPY public ./public
-COPY styles ./styles
-COPY types ./types
-COPY hooks ./hooks
-
-# Проверяем что файлы на месте (для отладки)
-RUN echo "=== Checking files ===" && \
-    echo "Current directory:" && pwd && \
-    echo "=== lib directory ===" && \
-    (test -d lib && echo "lib/ EXISTS" && ls -la lib/ | head -10) || echo "lib/ NOT FOUND" && \
-    echo "=== lib/api directory ===" && \
-    (test -d lib/api && echo "lib/api/ EXISTS" && ls -la lib/api/) || echo "lib/api/ NOT FOUND" && \
-    echo "=== Checking specific files ===" && \
-    (test -f lib/hooks.ts && echo "✅ lib/hooks.ts EXISTS") || echo "❌ lib/hooks.ts NOT FOUND" && \
-    (test -f lib/api/apiSlice.ts && echo "✅ lib/api/apiSlice.ts EXISTS") || echo "❌ lib/api/apiSlice.ts NOT FOUND" && \
-    (test -f lib/api/authSlice.ts && echo "✅ lib/api/authSlice.ts EXISTS") || echo "❌ lib/api/authSlice.ts NOT FOUND" && \
-    echo "=== tsconfig.json paths ===" && \
-    (test -f tsconfig.json && cat tsconfig.json | grep -A 3 '"paths"') || echo "tsconfig.json NOT FOUND"
+# Копируем все файлы проекта
+COPY . .
 
 # Отключаем telemetry во время сборки
 ENV NEXT_TELEMETRY_DISABLED=1
