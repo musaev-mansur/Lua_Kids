@@ -15,15 +15,18 @@ const nextConfig = {
   },
   webpack: (config, { isServer, webpack }) => {
     // Настраиваем alias для путей @/*
+    const basePath = path.resolve(__dirname)
     if (!config.resolve.alias) {
       config.resolve.alias = {}
     }
     // Явно указываем alias для @
-    config.resolve.alias['@'] = path.resolve(__dirname)
-    // Также добавляем для всех подпутей
-    config.resolve.alias['@/lib'] = path.resolve(__dirname, 'lib')
-    config.resolve.alias['@/components'] = path.resolve(__dirname, 'components')
-    config.resolve.alias['@/app'] = path.resolve(__dirname, 'app')
+    config.resolve.alias['@'] = basePath
+    
+    // Убеждаемся что модули разрешаются правильно
+    if (!config.resolve.modules) {
+      config.resolve.modules = ['node_modules']
+    }
+    config.resolve.modules.push(basePath)
     
     // Игнорируем Node.js модули для fengari в браузере
     if (!isServer) {
