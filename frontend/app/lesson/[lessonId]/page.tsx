@@ -199,10 +199,10 @@ export default function LessonPage() {
 
     // Отправляем результаты на backend для проверки
     try {
-      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' ? '/api' : 'http://localhost:8000/api')
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
       
-      const response = await fetch(`${API_BASE_URL}/api/check_code/`, {
+      const response = await fetch(`${API_BASE_URL}/check_code/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
