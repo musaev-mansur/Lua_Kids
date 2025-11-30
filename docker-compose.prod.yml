@@ -44,3 +44,19 @@ volumes:
   backend_media:
   backend_static:
 
+# 1. Скопируйте сертификаты (если нужно в проект, но лучше монтировать напрямую)
+# mkdir -p nginx/ssl
+# cp -r /etc/letsencrypt/live/haam.cloud nginx/ssl/
+
+# # 2. Обновите код
+# cd /opt/roblox_academy
+# git pull
+
+# # 3. Запустите nginx
+# docker-compose -f docker-compose.prod.yml up -d nginx
+
+# # 4. Проверьте статус
+# docker-compose -f docker-compose.prod.yml ps
+
+# # 5. Проверьте логи nginx
+# docker-compose -f docker-compose.prod.yml logs nginx
