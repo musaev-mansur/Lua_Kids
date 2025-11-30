@@ -1,14 +1,10 @@
 version: '3.8'
 
 services:
-  # Backend (Django)
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    build: ./backend
     container_name: roblox_academy_backend
     volumes:
-      - ./backend:/app
       - backend_media:/app/media
       - backend_static:/app/staticfiles
     environment:
@@ -16,19 +12,11 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - ALLOWED_HOSTS=haam.cloud,www.haam.cloud,localhost,127.0.0.1,backend
       - CORS_ALLOWED_ORIGINS=https://haam.cloud,https://www.haam.cloud
-    command: >
-      sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             gunicorn roblox_academy.wsgi:application --bind 0.0.0.0:8000 --workers 3"
-    networks:
-      - roblox_academy_network
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn roblox_academy.wsgi:application --bind 0.0.0.0:8000 --workers 3"
     restart: unless-stopped
 
-  # Frontend (Next.js)
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    build: ./frontend
     container_name: roblox_academy_frontend
     environment:
       - NODE_ENV=production
@@ -36,15 +24,9 @@ services:
       - NEXT_TELEMETRY_DISABLED=1
     depends_on:
       - backend
-    networks:
-      - roblox_academy_network
     restart: unless-stopped
 
 volumes:
   backend_media:
   backend_static:
-
-networks:
-  roblox_academy_network:
-    driver: bridge
 
