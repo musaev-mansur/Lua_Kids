@@ -1,0 +1,58 @@
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'standalone', // Для Docker
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  images: {
+    unoptimized: true,
+  },
+  webpack: (config, { isServer, webpack }) => {
+    // Игнорируем Node.js модули для fengari в браузере
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        child_process: false,
+        net: false,
+        tls: false,
+        // НЕ добавляем tmp и readline-sync: false, так как мы заменяем их на заглушки
+      }
+      
+      // Настраиваем alias для замены проблемных модулей
+      if (!config.resolve.alias) {
+        config.resolve.alias = {}
+      }
+      config.resolve.alias['tmp'] = path.resolve(__dirname, 'lib/tmp-stub.js')
+      config.resolve.alias['readline-sync'] = path.resolve(__dirname, 'lib/readline-sync-stub.js')
+      
+      // Игнорируем проблемные модули, которые используются в fengari
+      config.plugins = config.plugins || []
+      
+      // Заменяем tmp модуль на заглушку
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /^tmp$/,
+          path.resolve(__dirname, 'lib/tmp-stub.js')
+        )
+      )
+      
+      // Заменяем readline-sync модуль на заглушку
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /^readline-sync$/,
+          path.resolve(__dirname, 'lib/readline-sync-stub.js')
+        )
+      )
+    }
+    return config
+  },
+}
+
+export default nextConfig
