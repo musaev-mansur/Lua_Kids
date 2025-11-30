@@ -15,8 +15,19 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 
-# Копируем все файлы проекта
-COPY . .
+# Копируем файлы проекта явно (чтобы гарантировать копирование lib/)
+COPY package.json ./
+COPY tsconfig.json ./
+COPY next.config.mjs ./
+COPY postcss.config.mjs ./
+COPY components.json ./
+COPY app ./app
+COPY components ./components
+COPY lib ./lib
+COPY public ./public
+COPY styles ./styles
+COPY types ./types
+COPY hooks ./hooks
 
 # Проверяем что файлы на месте (для отладки)
 RUN echo "=== Checking files ===" && \
