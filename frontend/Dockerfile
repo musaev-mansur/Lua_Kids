@@ -19,7 +19,14 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Проверяем что файлы на месте (для отладки)
-RUN ls -la lib/ && ls -la lib/api/ || echo "WARNING: lib files not found"
+RUN echo "=== Checking files ===" && \
+    ls -la /app/ | head -20 && \
+    echo "=== lib directory ===" && \
+    ls -la /app/lib/ 2>/dev/null || echo "lib/ NOT FOUND" && \
+    echo "=== lib/api directory ===" && \
+    ls -la /app/lib/api/ 2>/dev/null || echo "lib/api/ NOT FOUND" && \
+    echo "=== tsconfig.json ===" && \
+    cat /app/tsconfig.json | grep -A 5 paths || echo "tsconfig.json NOT FOUND"
 
 # Отключаем telemetry во время сборки
 ENV NEXT_TELEMETRY_DISABLED=1

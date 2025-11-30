@@ -18,7 +18,12 @@ const nextConfig = {
     if (!config.resolve.alias) {
       config.resolve.alias = {}
     }
+    // Явно указываем alias для @
     config.resolve.alias['@'] = path.resolve(__dirname)
+    // Также добавляем для всех подпутей
+    config.resolve.alias['@/lib'] = path.resolve(__dirname, 'lib')
+    config.resolve.alias['@/components'] = path.resolve(__dirname, 'components')
+    config.resolve.alias['@/app'] = path.resolve(__dirname, 'app')
     
     // Игнорируем Node.js модули для fengari в браузере
     if (!isServer) {
