@@ -10,7 +10,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-# Python lib directories (но не frontend/lib/)
+# lib/ - не игнорируем, так как frontend/lib/ содержит важный код
+# Игнорируем только Python lib директории
 /backend/lib/
 lib64/
 parts/
@@ -109,7 +110,7 @@ Thumbs.db
 Desktop.ini
 
 # Docker
-.dockerignore
+# .dockerignore - не игнорируем, это конфигурационный файл
 
 # Temporary files
 *.tmp
@@ -125,9 +126,6 @@ Desktop.ini
 
 # Optional REPL history
 .node_repl_history
-
-# Output of 'npm pack'
-*.tgz
 
 # Yarn Integrity file
 .yarn-integrity

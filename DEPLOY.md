@@ -70,9 +70,8 @@ chmod +x deploy.sh
 ./deploy.sh
 ```
 
-Или вручную (сначала авторизуйтесь в Docker Hub):
+Или вручную:
 ```bash
-docker login  # Создайте аккаунт на hub.docker.com если нет
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
 

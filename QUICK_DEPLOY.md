@@ -2,6 +2,16 @@
 
 ## Шаги деплоя
 
+### 0. Очистка сервера (если нужно начать с чистого листа)
+
+```bash
+# Если нужно полностью очистить сервер от всех Docker данных
+chmod +x cleanup-server.sh
+./cleanup-server.sh
+```
+
+⚠️ **ВНИМАНИЕ:** Это удалит ВСЕ контейнеры, образы и volumes!
+
 ### 1. На сервере установите Docker и Docker Compose
 
 ```bash
@@ -34,25 +44,7 @@ SECRET_KEY=сгенерируйте-новый-ключ-здесь
 python3 -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
 
-### 4. Решите проблему с Docker Hub rate limit (если возникла)
-
-Если при деплое видите ошибку `429 Too Many Requests`:
-
-**Вариант 1 (рекомендуется):** Авторизуйтесь в Docker Hub:
-```bash
-docker login
-# Введите ваш username и password
-```
-
-**Вариант 2:** Используйте скрипт для предзагрузки образов:
-```bash
-chmod +x fix-docker-rate-limit.sh
-./fix-docker-rate-limit.sh
-```
-
-Подробнее см. `DEPLOY_TROUBLESHOOTING.md`
-
-### 5. Запустите деплой
+### 4. Запустите деплой
 
 ```bash
 chmod +x deploy.sh
@@ -64,19 +56,19 @@ chmod +x deploy.sh
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
-### 6. Настройте DNS
+### 5. Настройте DNS
 
 В панели Timeweb Cloud добавьте A-записи:
 - `haam.cloud` → IP вашего сервера
 - `www.haam.cloud` → IP вашего сервера
 
-### 7. Создайте суперпользователя
+### 6. Создайте суперпользователя
 
 ```bash
 docker-compose -f docker-compose.prod.yml exec backend python manage.py createsuperuser
 ```
 
-### 8. Настройте SSL (опционально, но рекомендуется)
+### 7. Настройте SSL (опционально, но рекомендуется)
 
 ```bash
 # Установите certbot
