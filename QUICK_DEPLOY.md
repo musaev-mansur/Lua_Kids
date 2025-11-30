@@ -34,7 +34,25 @@ SECRET_KEY=сгенерируйте-новый-ключ-здесь
 python3 -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
 
-### 4. Запустите деплой
+### 4. Решите проблему с Docker Hub rate limit (если возникла)
+
+Если при деплое видите ошибку `429 Too Many Requests`:
+
+**Вариант 1 (рекомендуется):** Авторизуйтесь в Docker Hub:
+```bash
+docker login
+# Введите ваш username и password
+```
+
+**Вариант 2:** Используйте скрипт для предзагрузки образов:
+```bash
+chmod +x fix-docker-rate-limit.sh
+./fix-docker-rate-limit.sh
+```
+
+Подробнее см. `DEPLOY_TROUBLESHOOTING.md`
+
+### 5. Запустите деплой
 
 ```bash
 chmod +x deploy.sh
@@ -43,29 +61,29 @@ chmod +x deploy.sh
 
 Или вручную:
 ```bash
-docker-compose -f docker-compose.prod.full.yml up -d --build
+docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
-### 5. Настройте DNS
+### 6. Настройте DNS
 
 В панели Timeweb Cloud добавьте A-записи:
 - `haam.cloud` → IP вашего сервера
 - `www.haam.cloud` → IP вашего сервера
 
-### 6. Создайте суперпользователя
+### 7. Создайте суперпользователя
 
 ```bash
-docker-compose -f docker-compose.prod.full.yml exec backend python manage.py createsuperuser
+docker-compose -f docker-compose.prod.yml exec backend python manage.py createsuperuser
 ```
 
-### 7. Настройте SSL (опционально, но рекомендуется)
+### 8. Настройте SSL (опционально, но рекомендуется)
 
 ```bash
 # Установите certbot
 apt install certbot -y
 
 # Остановите nginx
-docker-compose -f docker-compose.prod.full.yml stop nginx
+docker-compose -f docker-compose.prod.yml stop nginx
 
 # Получите сертификат
 certbot certonly --standalone -d haam.cloud -d www.haam.cloud
@@ -78,7 +96,7 @@ cp -r /etc/letsencrypt/live/haam.cloud nginx/ssl/
 nano nginx/nginx.conf
 
 # Перезапустите nginx
-docker-compose -f docker-compose.prod.full.yml restart nginx
+docker-compose -f docker-compose.prod.yml restart nginx
 ```
 
 ## Готово! 🎉

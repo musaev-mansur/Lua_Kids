@@ -14,7 +14,17 @@ RUN npm ci
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+
+# Копируем файлы проекта (исключая node_modules через .dockerignore)
+COPY package.json ./
+COPY tsconfig.json ./
+COPY next.config.mjs ./
+COPY app ./app
+COPY components ./components
+COPY lib ./lib
+COPY public ./public
+COPY styles ./styles
+COPY types ./types
 
 # Отключаем telemetry во время сборки
 ENV NEXT_TELEMETRY_DISABLED=1

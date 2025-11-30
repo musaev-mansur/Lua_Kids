@@ -70,21 +70,22 @@ chmod +x deploy.sh
 ./deploy.sh
 ```
 
-Или вручную:
+Или вручную (сначала авторизуйтесь в Docker Hub):
 ```bash
-docker-compose -f docker-compose.prod.full.yml up -d --build
+docker login  # Создайте аккаунт на hub.docker.com если нет
+docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 ### 4. Создание суперпользователя
 
 ```bash
-docker-compose -f docker-compose.prod.full.yml exec backend python manage.py createsuperuser
+docker-compose -f docker-compose.prod.yml exec backend python manage.py createsuperuser
 ```
 
 ### 5. Загрузка начальных данных (опционально)
 
 ```bash
-docker-compose -f docker-compose.prod.full.yml exec backend python manage.py load_initial_data
+docker-compose -f docker-compose.prod.yml exec backend python manage.py load_initial_data
 ```
 
 ## Настройка SSL (HTTPS)
@@ -99,7 +100,7 @@ apt install certbot -y
 
 ```bash
 # Останавливаем nginx временно
-docker-compose -f docker-compose.prod.full.yml stop nginx
+docker-compose -f docker-compose.prod.yml stop nginx
 
 # Получаем сертификат
 certbot certonly --standalone -d haam.cloud -d www.haam.cloud
@@ -122,7 +123,7 @@ nano nginx/nginx.conf
 ### 4. Перезапуск nginx
 
 ```bash
-docker-compose -f docker-compose.prod.full.yml restart nginx
+docker-compose -f docker-compose.prod.yml restart nginx
 ```
 
 ### 5. Автоматическое обновление сертификата
@@ -142,45 +143,45 @@ crontab -e
 ### Просмотр логов
 ```bash
 # Все сервисы
-docker-compose -f docker-compose.prod.full.yml logs -f
+docker-compose -f docker-compose.prod.yml logs -f
 
 # Только backend
-docker-compose -f docker-compose.prod.full.yml logs -f backend
+docker-compose -f docker-compose.prod.yml logs -f backend
 
 # Только frontend
-docker-compose -f docker-compose.prod.full.yml logs -f frontend
+docker-compose -f docker-compose.prod.yml logs -f frontend
 
 # Только nginx
-docker-compose -f docker-compose.prod.full.yml logs -f nginx
+docker-compose -f docker-compose.prod.yml logs -f nginx
 ```
 
 ### Перезапуск сервисов
 ```bash
-docker-compose -f docker-compose.prod.full.yml restart
+docker-compose -f docker-compose.prod.yml restart
 ```
 
 ### Остановка сервисов
 ```bash
-docker-compose -f docker-compose.prod.full.yml down
+docker-compose -f docker-compose.prod.yml down
 ```
 
 ### Обновление проекта
 ```bash
 cd /opt/roblox_academy
 git pull
-docker-compose -f docker-compose.prod.full.yml up -d --build
+docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 ### Выполнение команд Django
 ```bash
 # Миграции
-docker-compose -f docker-compose.prod.full.yml exec backend python manage.py migrate
+docker-compose -f docker-compose.prod.yml exec backend python manage.py migrate
 
 # Сбор статики
-docker-compose -f docker-compose.prod.full.yml exec backend python manage.py collectstatic --noinput
+docker-compose -f docker-compose.prod.yml exec backend python manage.py collectstatic --noinput
 
 # Создание суперпользователя
-docker-compose -f docker-compose.prod.full.yml exec backend python manage.py createsuperuser
+docker-compose -f docker-compose.prod.yml exec backend python manage.py createsuperuser
 ```
 
 ## Структура портов
@@ -202,12 +203,12 @@ docker-compose -f docker-compose.prod.full.yml exec backend python manage.py cre
 
 1. Проверьте, что контейнеры запущены:
    ```bash
-   docker-compose -f docker-compose.prod.full.yml ps
+   docker-compose -f docker-compose.prod.yml ps
    ```
 
 2. Проверьте логи:
    ```bash
-   docker-compose -f docker-compose.prod.full.yml logs
+   docker-compose -f docker-compose.prod.yml logs
    ```
 
 3. Проверьте DNS:
@@ -218,14 +219,14 @@ docker-compose -f docker-compose.prod.full.yml exec backend python manage.py cre
 ### Проблема: Ошибки миграций
 
 ```bash
-docker-compose -f docker-compose.prod.full.yml exec backend python manage.py migrate
+docker-compose -f docker-compose.prod.yml exec backend python manage.py migrate
 ```
 
 ### Проблема: Статические файлы не загружаются
 
 ```bash
-docker-compose -f docker-compose.prod.full.yml exec backend python manage.py collectstatic --noinput
-docker-compose -f docker-compose.prod.full.yml restart nginx
+docker-compose -f docker-compose.prod.yml exec backend python manage.py collectstatic --noinput
+docker-compose -f docker-compose.prod.yml restart nginx
 ```
 
 ## Безопасность

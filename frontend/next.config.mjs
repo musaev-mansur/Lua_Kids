@@ -14,6 +14,12 @@ const nextConfig = {
     unoptimized: true,
   },
   webpack: (config, { isServer, webpack }) => {
+    // Настраиваем alias для путей @/*
+    if (!config.resolve.alias) {
+      config.resolve.alias = {}
+    }
+    config.resolve.alias['@'] = path.resolve(__dirname)
+    
     // Игнорируем Node.js модули для fengari в браузере
     if (!isServer) {
       config.resolve.fallback = {
@@ -25,10 +31,6 @@ const nextConfig = {
         // НЕ добавляем tmp и readline-sync: false, так как мы заменяем их на заглушки
       }
       
-      // Настраиваем alias для замены проблемных модулей
-      if (!config.resolve.alias) {
-        config.resolve.alias = {}
-      }
       config.resolve.alias['tmp'] = path.resolve(__dirname, 'lib/tmp-stub.js')
       config.resolve.alias['readline-sync'] = path.resolve(__dirname, 'lib/readline-sync-stub.js')
       
