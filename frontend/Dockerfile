@@ -20,13 +20,17 @@ COPY . .
 
 # Проверяем что файлы на месте (для отладки)
 RUN echo "=== Checking files ===" && \
-    ls -la /app/ | head -20 && \
+    echo "Current directory:" && pwd && \
     echo "=== lib directory ===" && \
-    ls -la /app/lib/ 2>/dev/null || echo "lib/ NOT FOUND" && \
+    (test -d lib && echo "lib/ EXISTS" && ls -la lib/ | head -10) || echo "lib/ NOT FOUND" && \
     echo "=== lib/api directory ===" && \
-    ls -la /app/lib/api/ 2>/dev/null || echo "lib/api/ NOT FOUND" && \
-    echo "=== tsconfig.json ===" && \
-    cat /app/tsconfig.json | grep -A 5 paths || echo "tsconfig.json NOT FOUND"
+    (test -d lib/api && echo "lib/api/ EXISTS" && ls -la lib/api/) || echo "lib/api/ NOT FOUND" && \
+    echo "=== Checking specific files ===" && \
+    (test -f lib/hooks.ts && echo "✅ lib/hooks.ts EXISTS") || echo "❌ lib/hooks.ts NOT FOUND" && \
+    (test -f lib/api/apiSlice.ts && echo "✅ lib/api/apiSlice.ts EXISTS") || echo "❌ lib/api/apiSlice.ts NOT FOUND" && \
+    (test -f lib/api/authSlice.ts && echo "✅ lib/api/authSlice.ts EXISTS") || echo "❌ lib/api/authSlice.ts NOT FOUND" && \
+    echo "=== tsconfig.json paths ===" && \
+    (test -f tsconfig.json && cat tsconfig.json | grep -A 3 '"paths"') || echo "tsconfig.json NOT FOUND"
 
 # Отключаем telemetry во время сборки
 ENV NEXT_TELEMETRY_DISABLED=1

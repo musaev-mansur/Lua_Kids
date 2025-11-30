@@ -16,17 +16,33 @@ const nextConfig = {
   webpack: (config, { isServer, webpack }) => {
     // Настраиваем alias для путей @/*
     const basePath = path.resolve(__dirname)
+    
+    if (!config.resolve) {
+      config.resolve = {}
+    }
+    
     if (!config.resolve.alias) {
       config.resolve.alias = {}
     }
+    
     // Явно указываем alias для @
     config.resolve.alias['@'] = basePath
     
     // Убеждаемся что модули разрешаются правильно
     if (!config.resolve.modules) {
-      config.resolve.modules = ['node_modules']
+      config.resolve.modules = []
     }
-    config.resolve.modules.push(basePath)
+    if (Array.isArray(config.resolve.modules)) {
+      config.resolve.modules.push(basePath)
+    }
+    
+    // Добавляем расширения для разрешения
+    if (!config.resolve.extensions) {
+      config.resolve.extensions = []
+    }
+    if (!config.resolve.extensions.includes('.ts')) {
+      config.resolve.extensions.push('.ts', '.tsx', '.js', '.jsx')
+    }
     
     // Игнорируем Node.js модули для fengari в браузере
     if (!isServer) {
