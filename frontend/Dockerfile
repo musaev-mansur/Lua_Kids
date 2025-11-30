@@ -15,16 +15,11 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 
-# Копируем файлы проекта (исключая node_modules через .dockerignore)
-COPY package.json ./
-COPY tsconfig.json ./
-COPY next.config.mjs ./
-COPY app ./app
-COPY components ./components
-COPY lib ./lib
-COPY public ./public
-COPY styles ./styles
-COPY types ./types
+# Копируем все файлы проекта
+COPY . .
+
+# Проверяем что файлы на месте (для отладки)
+RUN ls -la lib/ && ls -la lib/api/ || echo "WARNING: lib files not found"
 
 # Отключаем telemetry во время сборки
 ENV NEXT_TELEMETRY_DISABLED=1
