@@ -224,11 +224,9 @@ def check_code(request):
             passed_auto_check = False
             
             if isinstance(output, list):
-                # Проверяем, есть ли ожидаемый вывод в списке вывода
-                passed_auto_check = any(
-                    str(line).strip() == str(expected_output).strip() 
-                    for line in output
-                )
+                # Объединяем все строки вывода в одну строку через пробел
+                actual_output = ' '.join(str(line).strip() for line in output if line)
+                passed_auto_check = actual_output.strip() == str(expected_output).strip()
             elif isinstance(output, str):
                 passed_auto_check = str(output).strip() == str(expected_output).strip()
             
