@@ -31,12 +31,13 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:8000/api
     container_name: roblox_academy_frontend
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
       - NEXT_TELEMETRY_DISABLED=1
     depends_on:
       - backend

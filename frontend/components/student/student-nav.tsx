@@ -56,6 +56,9 @@ export function StudentNav() {
           <Link href="/" className="text-foreground transition-colors hover:text-primary">
             Мой прогресс
           </Link>
+          <Link href="/compiler" className="text-muted-foreground transition-colors hover:text-primary">
+            Компилятор
+          </Link>
           {(user.role === 'admin' || user.role === 'teacher') && (
             <Link href="/admin/submissions" className="text-muted-foreground transition-colors hover:text-primary">
               Проверка заданий

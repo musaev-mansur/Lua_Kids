@@ -4,7 +4,8 @@ import type {
   StudentLesson, StudentChallenge, Submission, SubmissionStatus
 } from '../types'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' ? '/api' : 'http://localhost:8000/api')
+// Для локальной разработки используем localhost:8000, для продакшна - переменную окружения
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
 
 // Преобразование данных из API в формат frontend
 const transformCourse = (apiCourse: any): Course => ({
