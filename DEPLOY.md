@@ -28,8 +28,8 @@ apt install git -y
 ### 3. Настройка домена
 
 В панели управления Timeweb Cloud:
-1. Добавьте A-запись для `haam.cloud` → IP вашего сервера
-2. Добавьте A-запись для `www.haam.cloud` → IP вашего сервера
+1. Добавьте A-запись для `luatutor.com` → IP вашего сервера
+2. Добавьте A-запись для `www.luatutor.com` → IP вашего сервера
 
 ## Деплой проекта
 
@@ -102,27 +102,17 @@ apt install certbot -y
 docker-compose -f docker-compose.prod.yml stop nginx
 
 # Получаем сертификат
-certbot certonly --standalone -d haam.cloud -d www.haam.cloud
-
-# Копируем сертификаты в проект
-mkdir -p nginx/ssl
-cp -r /etc/letsencrypt/live/haam.cloud nginx/ssl/
+certbot certonly --standalone -d luatutor.com -d www.luatutor.com
 ```
 
 ### 3. Обновление конфигурации nginx
 
-Раскомментируйте HTTPS секцию в `nginx/nginx.conf`:
-
-```bash
-nano nginx/nginx.conf
-```
-
-Раскомментируйте блок `server` с `listen 443 ssl` и закомментируйте редирект в HTTP блоке.
+Убедитесь, что в `nginx/nginx.conf` прописаны пути к сертификатам `luatutor.com`.
 
 ### 4. Перезапуск nginx
 
 ```bash
-docker-compose -f docker-compose.prod.yml restart nginx
+docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 ### 5. Автоматическое обновление сертификата
@@ -134,7 +124,7 @@ crontab -e
 
 Добавьте строку:
 ```
-0 3 * * * certbot renew --quiet && docker-compose -f /opt/roblox_academy/docker-compose.prod.full.yml restart nginx
+0 3 * * * certbot renew --quiet && docker compose -f /opt/roblox_academy/docker-compose.prod.yml restart nginx
 ```
 
 ## Полезные команды
@@ -192,9 +182,9 @@ docker-compose -f docker-compose.prod.yml exec backend python manage.py createsu
 
 ## Проверка работы
 
-1. Откройте в браузере: `http://haam.cloud`
-2. Проверьте API: `http://haam.cloud/api/`
-3. Проверьте админку: `http://haam.cloud/admin/`
+1. Откройте в браузере: `https://luatutor.com`
+2. Проверьте API: `https://luatutor.com/api/`
+3. Проверьте админку: `https://luatutor.com/admin/`
 
 ## Решение проблем
 
@@ -212,7 +202,7 @@ docker-compose -f docker-compose.prod.yml exec backend python manage.py createsu
 
 3. Проверьте DNS:
    ```bash
-   nslookup haam.cloud
+   nslookup luatutor.com
    ```
 
 ### Проблема: Ошибки миграций

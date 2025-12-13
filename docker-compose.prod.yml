@@ -10,8 +10,8 @@ services:
     environment:
       - DEBUG=False
       - SECRET_KEY=${SECRET_KEY}
-      - ALLOWED_HOSTS=haam.cloud,www.haam.cloud,localhost,127.0.0.1,backend
-      - CORS_ALLOWED_ORIGINS=https://haam.cloud,https://www.haam.cloud
+      - ALLOWED_HOSTS=luatutor.com,www.luatutor.com,localhost,127.0.0.1,backend
+      - CORS_ALLOWED_ORIGINS=https://luatutor.com,https://www.luatutor.com
     command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn roblox_academy.wsgi:application --bind 0.0.0.0:8000 --workers 3"
     restart: unless-stopped
 
@@ -19,11 +19,11 @@ services:
     build:
       context: ./frontend
       args:
-        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+        - NEXT_PUBLIC_API_URL=https://luatutor.com/api
     container_name: roblox_academy_frontend
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_API_URL=https://luatutor.com/api
       - NEXT_TELEMETRY_DISABLED=1
     depends_on:
       - backend

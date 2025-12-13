@@ -178,6 +178,6 @@ CORS_ALLOW_HEADERS = [
 ]
 
 # CSRF settings for HTTPS
-CSRF_TRUSTED_ORIGINS = ['https://haam.cloud', 'https://www.haam.cloud']
+CSRF_TRUSTED_ORIGINS = ['https://luatutor.com', 'https://www.luatutor.com']
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True

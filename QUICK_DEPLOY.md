@@ -59,8 +59,8 @@ docker-compose -f docker-compose.prod.yml up -d --build
 ### 5. Настройте DNS
 
 В панели Timeweb Cloud добавьте A-записи:
-- `haam.cloud` → IP вашего сервера
-- `www.haam.cloud` → IP вашего сервера
+- `luatutor.com` → IP вашего сервера
+- `www.luatutor.com` → IP вашего сервера
 
 ### 6. Создайте суперпользователя
 
@@ -78,22 +78,15 @@ apt install certbot -y
 docker-compose -f docker-compose.prod.yml stop nginx
 
 # Получите сертификат
-certbot certonly --standalone -d haam.cloud -d www.haam.cloud
+certbot certonly --standalone -d luatutor.com -d www.luatutor.com
 
-# Скопируйте сертификаты
-mkdir -p nginx/ssl
-cp -r /etc/letsencrypt/live/haam.cloud nginx/ssl/
-
-# Раскомментируйте HTTPS в nginx/nginx.conf
-nano nginx/nginx.conf
-
-# Перезапустите nginx
-docker-compose -f docker-compose.prod.yml restart nginx
+# Перезапустите контейнеры
+docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 ## Готово! 🎉
 
-Сайт доступен по адресу: **http://haam.cloud**
+Сайт доступен по адресу: **https://luatutor.com**
 
 Для подробной инструкции см. `DEPLOY.md`
 

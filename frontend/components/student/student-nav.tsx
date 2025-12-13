@@ -47,7 +47,7 @@ export function StudentNav() {
           </div>
           <Link href="/">
             <span>
-              Lua<span className="text-primary">Kids</span>
+              Lua<span className="text-primary">Tutor</span>
             </span>
           </Link>
         </div>

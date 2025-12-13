@@ -58,7 +58,7 @@ export default function LoginPage() {
               <BookOpen className="h-6 w-6" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">LuaKids</CardTitle>
+          <CardTitle className="text-2xl font-bold">LuaTutor</CardTitle>
           <CardDescription>Войдите в свой аккаунт</CardDescription>
         </CardHeader>
         <CardContent>
