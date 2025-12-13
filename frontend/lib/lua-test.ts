@@ -366,52 +366,7 @@ function runTest(name: string, code: string, executor: any): TestResult {
  * Выводит результаты тестов в консоль
  */
 export function printTestResults(results: TestResult[]): void {
-  console.log("\n" + "=".repeat(60))
-  console.log("РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ LUA EXECUTOR")
-  console.log("=".repeat(60))
-  
-  let passedCount = 0
-  let failedCount = 0
-  
-  results.forEach((result, index) => {
-    const status = result.passed ? "✓ PASS" : "✗ FAIL"
-    const icon = result.passed ? "✅" : "❌"
-    
-    console.log(`\n${icon} ${result.name}`)
-    console.log(`   Статус: ${status}`)
-    
-    if (result.passed) {
-      passedCount++
-      if (result.output && result.output.length > 0) {
-        console.log(`   Вывод (первые 3 строки):`)
-        result.output.slice(0, 3).forEach((line, i) => {
-          console.log(`     ${i + 1}. ${line}`)
-        })
-        if (result.output.length > 3) {
-          console.log(`     ... и еще ${result.output.length - 3} строк`)
-        }
-      }
-    } else {
-      failedCount++
-      console.log(`   Ошибка: ${result.error}`)
-      if (result.output && result.output.length > 0) {
-        console.log(`   Вывод до ошибки:`)
-        result.output.slice(0, 2).forEach((line, i) => {
-          console.log(`     ${i + 1}. ${line}`)
-        })
-      }
-    }
-  })
-  
-  console.log("\n" + "=".repeat(60))
-  console.log(`ИТОГО: ${passedCount} пройдено, ${failedCount} провалено из ${results.length}`)
-  console.log("=".repeat(60) + "\n")
-  
-  if (failedCount === 0) {
-    console.log("🎉 Все тесты пройдены! Lua Executor полностью функционален!")
-  } else {
-    console.log("⚠️  Некоторые тесты провалены. Проверьте ошибки выше.")
-  }
+  // Logging removed for performance
 }
 
 /**

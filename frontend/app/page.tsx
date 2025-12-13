@@ -42,38 +42,6 @@ export default function DashboardPage() {
     { skip: !user?.id }
   )
   
-  // Временная отладка для проверки данных
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      console.log('👤 User ID для запроса:', user?.id, 'Type:', typeof user?.id)
-      console.log('📡 Запрос StudentLessons:', { studentId: user?.id })
-      console.log('🌐 URL запроса:', `/api/student-lessons/?student=${user?.id}`)
-      console.log('📥 Ответ API:', {
-        studentLessons,
-        isLoading: studentLessonsLoading,
-        error: studentLessonsError,
-        hasData: !!studentLessons,
-        dataLength: studentLessons?.length || 0
-      })
-      if (studentLessonsError) {
-        console.error('❌ Ошибка API:', studentLessonsError)
-      }
-      if (studentLessons) {
-        console.log('🔍 StudentLessons Debug:', {
-          studentLessons,
-          count: studentLessons.length,
-          lessons: studentLessons.map(sl => ({
-            id: sl.id,
-            studentId: sl.student,
-            lessonId: sl.lesson ? (typeof sl.lesson === 'object' ? sl.lesson.id : sl.lesson) : 'null',
-            lessonType: typeof sl.lesson,
-            isUnlocked: sl.isUnlocked,
-            isCompleted: sl.isCompleted
-          }))
-        })
-      }
-    }
-  }, [user?.id, studentLessons, studentLessonsLoading, studentLessonsError])
 
   useEffect(() => {
     setIsClient(true)
@@ -190,43 +158,19 @@ export default function DashboardPage() {
       }
     })
     
-    if (typeof window !== 'undefined') {
-      console.log('📋 StudentLesson IDs:', Array.from(studentLessonIds))
-      console.log('📚 All course lesson IDs:', course.lessons.map(l => l.id))
-      console.log('📦 StudentLessons data:', studentLessons)
-    }
     
     // Фильтруем уроки, оставляя только те, которые есть в StudentLesson
     displayedLessons = course.lessons.filter(lesson => {
       const isIncluded = studentLessonIds.has(String(lesson.id))
-      if (typeof window !== 'undefined' && !isIncluded) {
-        console.log(`❌ Урок "${lesson.title}" (ID: ${lesson.id}) не найден в StudentLesson`)
-      }
       return isIncluded
     })
     
-    if (typeof window !== 'undefined') {
-      console.log('✅ Отфильтрованные уроки:', displayedLessons.map(l => ({ id: l.id, title: l.title })))
-      console.log('🔢 Количество отфильтрованных уроков:', displayedLessons.length)
-    }
   } else if (hasLoadedStudentLessons && !hasIndividualLessons) {
     // StudentLessons загружены, но пустой массив - у ученика нет назначенных уроков
     displayedLessons = []
-    if (typeof window !== 'undefined') {
-      console.log('ℹ️ StudentLessons загружены, но пустой массив - нет назначенных уроков')
-    }
   } else {
     // StudentLessons еще не загружены - показываем все уроки (fallback только во время загрузки)
     displayedLessons = course.lessons || []
-    if (typeof window !== 'undefined') {
-      console.log('⚠️ StudentLessons не загружены, показываем все уроки (fallback)')
-      console.log('📊 Состояние:', {
-        studentLessons,
-        studentLessonsLoading,
-        studentLessonsError,
-        hasLoadedStudentLessons
-      })
-    }
   }
   
   // Создаем мапу StudentLesson для быстрого доступа

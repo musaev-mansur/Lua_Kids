@@ -408,59 +408,7 @@ function runStressTest(
  * Выводит результаты стресс-тестов
  */
 export function printStressTestResults(results: StressTestResult[]): void {
-  console.log("\n" + "=".repeat(70))
-  console.log("РЕЗУЛЬТАТЫ СТРЕСС-ТЕСТИРОВАНИЯ LUA EXECUTOR")
-  console.log("=".repeat(70))
-  
-  let passedCount = 0
-  let failedCount = 0
-  
-  results.forEach((result) => {
-    const status = result.passed ? "✓ PASS" : "✗ FAIL"
-    const icon = result.passed ? "✅" : "❌"
-    
-    console.log(`\n${icon} ${result.name}`)
-    console.log(`   Статус: ${status}`)
-    console.log(`   Ожидаемое поведение: ${result.expectedBehavior}`)
-    
-    if (result.executionTime !== undefined) {
-      console.log(`   Время выполнения: ${result.executionTime}ms`)
-    }
-    
-    if (result.passed) {
-      passedCount++
-      if (result.output && result.output.length > 0) {
-        console.log(`   Вывод (первые 3 строки):`)
-        result.output.slice(0, 3).forEach((line, i) => {
-          console.log(`     ${i + 1}. ${line}`)
-        })
-        if (result.output.length > 3) {
-          console.log(`     ... и еще ${result.output.length - 3} строк`)
-        }
-      }
-    } else {
-      failedCount++
-      if (result.error) {
-        console.log(`   Ошибка: ${result.error}`)
-      }
-      if (result.output && result.output.length > 0) {
-        console.log(`   Вывод до ошибки:`)
-        result.output.slice(0, 2).forEach((line, i) => {
-          console.log(`     ${i + 1}. ${line}`)
-        })
-      }
-    }
-  })
-  
-  console.log("\n" + "=".repeat(70))
-  console.log(`ИТОГО: ${passedCount} пройдено, ${failedCount} провалено из ${results.length}`)
-  console.log("=".repeat(70) + "\n")
-  
-  if (failedCount === 0) {
-    console.log("🎉 Все стресс-тесты пройдены! Lua Executor устойчив к нагрузкам!")
-  } else {
-    console.log("⚠️  Некоторые тесты провалены. Проверьте защиту от опасного кода.")
-  }
+  // Logging removed for performance
 }
 
 /**
@@ -482,7 +430,7 @@ export async function runAllStressTestsAsync(
  */
 export function runAllStressTests(): { allPassed: boolean; results: StressTestResult[] } {
   // Предупреждение: синхронная версия может заблокировать UI
-  console.warn("Используется синхронная версия runAllStressTests. Рекомендуется использовать runAllStressTestsAsync")
+  // console.warn removed for performance
   const results: StressTestResult[] = []
   
   // Выполняем только быстрые тесты синхронно

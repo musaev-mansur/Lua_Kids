@@ -114,10 +114,6 @@ export function LuaVisualizer({
 
       decorationsRef.current = editorRef.current.deltaDecorations(decorationsRef.current, decorations)
       
-      // Отладка
-      if (decorations.length > 0) {
-        console.log('Decorations applied:', decorations.length, 'Current line:', currentStep?.line, 'Next line:', nextStep?.line)
-      }
     } catch (error) {
       console.error('Error updating decorations:', error)
     }
