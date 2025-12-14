@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.routers import DefaultRouter
 from .views import (
     CourseViewSet, LessonViewSet, UserViewSet, UserProgressViewSet, check_code,
@@ -17,8 +18,8 @@ router.register(r'submissions', SubmissionViewSet, basename='submission')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('auth/login/', login, name='login'),
-    path('auth/logout/', logout, name='logout'),
+    path('auth/login/', csrf_exempt(login), name='login'),
+    path('auth/logout/', csrf_exempt(logout), name='logout'),
     path('auth/me/', me, name='me'),
     path('check_code/', check_code, name='check_code'),
 ]
