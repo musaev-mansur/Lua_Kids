@@ -36,9 +36,9 @@ apt install git -y
 ### 1. Клонирование репозитория
 
 ```bash
-cd /opt
-git clone <your-repo-url> roblox_academy
-cd roblox_academy
+cd
+git clone <your-repo-url>
+cd /opt/roblox_academy/Lua_Kids
 ```
 
 ### 2. Создание файла окружения
@@ -73,6 +73,7 @@ chmod +x deploy.sh
 Или вручную:
 ```bash
 docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.prod.yml up --build
 ```
 
 ### 4. Создание суперпользователя

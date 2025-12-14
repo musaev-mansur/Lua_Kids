@@ -28,11 +28,8 @@ export default function DashboardPage() {
   // 1. Загружаем список всех курсов
   const { data: courses, isLoading: coursesLoading } = useGetCoursesQuery()
   
-  // 2. Выбираем курс. Логика:
-  // - Если курсов нет -> null
-  // - Ищем курс, название которого совпадает с именем пользователя (user.name)
-  // - Если такого нет -> берем ПЕРВЫЙ курс из списка (courses[0])
-  const selectedCourse = courses?.find(c => c.title === user?.name) || (courses && courses.length > 0 ? courses[0] : null)
+  // 2. Выбираем курс.
+  const selectedCourse: Course | undefined | null = courses?.find((c: Course) => c.title === user?.name) || (courses && courses.length > 0 ? courses[0] : null)
   const courseId = selectedCourse?.id
   
   // 3. Загружаем детали выбранного курса (уроки и т.д.)

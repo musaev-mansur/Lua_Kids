@@ -7,13 +7,34 @@ services:
     volumes:
       - backend_media:/app/media
       - backend_static:/app/staticfiles
+      # - ./backend/db.sqlite3:/app/db.sqlite3 # SQLite не нужен с Postgres
     environment:
       - DEBUG=False
       - SECRET_KEY=${SECRET_KEY}
       - ALLOWED_HOSTS=luatutor.com,www.luatutor.com,localhost,127.0.0.1,backend
       - CORS_ALLOWED_ORIGINS=https://luatutor.com,https://www.luatutor.com
+      # Postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=db
     command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn roblox_academy.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+    depends_on:
+      - db
     restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: roblox_academy_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    restart: unless-stopped
+    networks:
+      - default
 
   frontend:
     build:
@@ -48,3 +69,4 @@ services:
 volumes:
   backend_media:
   backend_static:
+  postgres_data:

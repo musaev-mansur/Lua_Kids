@@ -18,6 +18,7 @@ const transformCourse = (apiCourse: any): Course => ({
 
 const transformLesson = (apiLesson: any): Lesson => ({
   id: apiLesson.id,
+  course: apiLesson.course,
   title: apiLesson.title,
   description: apiLesson.description,
   order: apiLesson.order,
@@ -124,8 +125,11 @@ export const apiSlice = createApi({
     getCourses: builder.query<Course[], void>({
       query: () => '/courses/',
       transformResponse: (response: any) => {
-        if (Array.isArray(response)) {
-          return response.map(transformCourse)
+        // Поддержка пагинации (results) и простого массива
+        const items = Array.isArray(response) ? response : (response?.results || [])
+        
+        if (Array.isArray(items)) {
+          return items.map(transformCourse)
         }
         return []
       },

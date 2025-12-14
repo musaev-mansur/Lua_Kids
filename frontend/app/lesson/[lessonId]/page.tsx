@@ -31,8 +31,6 @@ import {
 } from "@/components/ui/dialog"
 import confetti from "canvas-confetti"
 
-const COURSE_ID = "roblox-lua-101"
-
 export default function LessonPage() {
   const params = useParams()
   const router = useRouter()
@@ -47,13 +45,17 @@ export default function LessonPage() {
   })
 
   const { data: lesson, isLoading: lessonLoading } = useGetLessonQuery(lessonId)
-  const { data: lessons } = useGetLessonsQuery({ courseId: COURSE_ID })
+  
+  // Используем ID курса из урока, или fallback
+  const courseId = lesson?.course || "roblox-lua-101"
+  
+  const { data: lessons } = useGetLessonsQuery({ courseId }, { skip: !lesson?.course })
   const { data: progress } = useGetCurrentProgressQuery(
     {
       userId: user?.id || "",
-      courseId: COURSE_ID,
+      courseId: courseId,
     },
-    { skip: !user?.id }
+    { skip: !user?.id || !lesson?.course }
   )
   const [completeLesson] = useCompleteLessonMutation()
 
@@ -242,7 +244,7 @@ export default function LessonPage() {
               try {
                 await completeLesson({
                   userId: user.id,
-                  courseId: COURSE_ID,
+                  courseId: courseId,
                   lessonId: lesson.id,
                 }).unwrap()
               } catch (err) {

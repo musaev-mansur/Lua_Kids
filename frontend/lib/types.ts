@@ -21,6 +21,7 @@ export interface Lesson {
   duration: number // minutes
   xpReward: number
   isLocked: boolean
+  course?: string // Course ID
   challenge?: {
     initialCode: string
     expectedOutput?: string

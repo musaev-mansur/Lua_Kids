@@ -25,7 +25,8 @@ class LessonSerializer(serializers.ModelSerializer):
         model = Lesson
         fields = [
             'id', 'title', 'description', 'order', 'video_url', 'pdf_file',
-            'pdf_file_url', 'content', 'duration', 'xp_reward', 'is_locked', 'challenge'
+            'pdf_file_url', 'content', 'duration', 'xp_reward', 'is_locked', 'challenge',
+            'course'
         ]
     
     def get_is_locked(self, obj):
