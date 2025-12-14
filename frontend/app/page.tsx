@@ -7,13 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Rocket, Star } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { useGetCourseQuery, useGetCurrentProgressQuery, useGetStudentLessonsQuery } from "@/lib/api/apiSlice"
+import { useGetCoursesQuery, useGetCourseQuery, useGetCurrentProgressQuery, useGetStudentLessonsQuery } from "@/lib/api/apiSlice"
 import { useAppSelector, useAppDispatch } from "@/lib/hooks"
 import { useGetMeQuery } from "@/lib/api/authSlice"
 import { setCredentials } from "@/lib/api/authSlice"
-import type { Lesson } from "@/lib/types"
-
-const COURSE_ID = "roblox-lua-101"
+import type { Lesson, Course } from "@/lib/types"
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -27,13 +25,27 @@ export default function DashboardPage() {
     skip: isAuthenticated, // Пропускаем только если уже залогинен
   })
   
-  const { data: course, isLoading: courseLoading, error: courseError } = useGetCourseQuery(COURSE_ID)
+  // 1. Загружаем список всех курсов
+  const { data: courses, isLoading: coursesLoading } = useGetCoursesQuery()
+  
+  // 2. Выбираем курс. Логика:
+  // - Если курсов нет -> null
+  // - Ищем курс, название которого совпадает с именем пользователя (user.name)
+  // - Если такого нет -> берем ПЕРВЫЙ курс из списка (courses[0])
+  const selectedCourse = courses?.find(c => c.title === user?.name) || (courses && courses.length > 0 ? courses[0] : null)
+  const courseId = selectedCourse?.id
+  
+  // 3. Загружаем детали выбранного курса (уроки и т.д.)
+  const { data: course, isLoading: courseLoading, error: courseError } = useGetCourseQuery(courseId || "", {
+    skip: !courseId
+  })
+
   const { data: progress, isLoading: progressLoading } = useGetCurrentProgressQuery(
     {
       userId: user?.id || "",
-      courseId: COURSE_ID,
+      courseId: courseId || "",
     },
-    { skip: !user?.id }
+    { skip: !user?.id || !courseId }
   )
   
   // Получаем индивидуальные уроки ученика
